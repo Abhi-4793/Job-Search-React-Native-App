@@ -1,10 +1,13 @@
 import { Stack } from "expo-router";
-import { useCallback, useEffect } from "react";
 import { useFonts } from "expo-font";
-import { Text } from "react-native";
-import * as SplashScreen from "expo-splash-screen";
+// import * as SplashScreen from "expo-splash-screen";
 
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
+
+export const unstable_settings = {
+  // Ensure any route can link back to `/`
+  initialRouteName: "home",
+};
 
 const Layout = () => {
   const [fontsLoaded] = useFonts({
@@ -12,14 +15,16 @@ const Layout = () => {
     DMMedium: require("../assets/fonts/DMSans-Medium.ttf"),
     DMRegular: require("../assets/fonts/DMSans-Regular.ttf"),
   });
-  // useEffect(() => {}, []);
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-  if (!fontsLoaded) return null;
 
-  return <Stack onLayout={onLayoutRootView} />;
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  return (
+    <Stack initialRouteName="home">
+      <Stack.Screen name="home" />
+    </Stack>
+  );
 };
+
 export default Layout;
